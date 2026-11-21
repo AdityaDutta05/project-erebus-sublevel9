@@ -6,6 +6,23 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <title>PROJECT EREBUS: SUB-LEVEL 9</title>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com",
+        "three/addons/": "https://unpkg.com"
+      }
+    }
+  </script>
+  <script>
+    window.addEventListener('error', (e) => {
+      document.body.insertAdjacentHTML('beforeend', `<div style="position:fixed;bottom:0;left:0;right:0;background:#7f1d1d;color:#fff;padding:12px;z-index:99999;font-family:monospace;font-size:12px;">ERR: ${e.message} (${e.filename}:${e.lineno})</div>`);
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      document.body.insertAdjacentHTML('beforeend', `<div style="position:fixed;bottom:40px;left:0;right:0;background:#7f1d1d;color:#fff;padding:12px;z-index:99999;font-family:monospace;font-size:12px;">PROMISE ERR: ${e.reason}</div>`);
+    });
+  </script>
+</head>
   <style>
     * {
       box-sizing: border-box;
