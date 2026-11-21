@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>PROJECT EREBUS: SUB-LEVEL 9</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #020406;
+      font-family: 'Courier New', Courier, monospace;
+      color: #c8d6e5;
+    }
+
+    #game-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    #visor-vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(circle at center, transparent 55%, rgba(0, 5, 10, 0.85) 100%);
+    }
+
+    #hud {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      padding: env(safe-area-inset-top, 14px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .panel {
+      background: rgba(6, 12, 18, 0.72);
+      border: 1px solid rgba(100, 180, 220, 0.25);
+      backdrop-filter: blur(4px);
+      padding: 8px 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .sys-label {
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      color: #5f87a0;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .objective-text {
+      font-size: 11px;
+      font-weight: bold;
+      color: #e0f2fe;
+      letter-spacing: 0.5px;
+    }
+
+    .objective-sub {
+      font-size: 10px;
+      color: #38bdf8;
+      margin-top: 2px;
+    }
+
+    #btn-debug-ai {
+      pointer-events: auto;
+      margin-top: 6px;
+      padding: 4px 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    #btn-debug-ai.active {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+
+    #ai-telemetry-drawer {
+      display: none;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(100, 180, 220, 0.25);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .tele-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .tele-key {
+      color: #64748b;
+    }
+
+    .tele-val {
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .telemetry-box {
+      min-width: 135px;
+      text-align: right;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(100, 180, 220, 0.3);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+
+    #battery-fill {
+      width: 100%;
+      height: 100%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      transition: width 0.1s linear, background-color 0.2s ease;
+    }
+
+    #stamina-fill {
+      width: 100%;
+      height: 100%;
+      background: #94a3b8;
+      transition: width 0.1s linear;
+    }
+
+    #fps-counter {
+      font-size: 10px;
+      color: #4ade80;
+      margin-top: 5px;
+      letter-spacing: 1px;
+    }
+
+    #reticle {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      transform: translate(-50%, -50%);
+      background: rgba(200, 230, 255, 0.45);
+      border-radius: 50%;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    #joystick-zone-visual {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.06);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: none;
+      z-index: 8;
+    }
+
+    #joystick-knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.3);
+      border: 1px solid rgba(186, 230, 253, 0.6);
+      transform: translate(-50%, -50%);
+    }
+
+    .hud-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .touch-hint {
+      font-size: 10px;
+      color: rgba(148, 163, 184, 0.55);
+      letter-spacing: 1px;
+      max-width: 160px;
+    }
+
+    .action-cluster {
+      display: flex;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    .tac-btn {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: rgba(10, 20, 30, 0.55);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      color: #bae6fd;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tac-btn:active, .tac-btn.active {
+      background: rgba(56, 189, 248, 0.28);
+      border-color: #7dd3fc;
+      transform: scale(0.94);
+    }
+
+    .tac-btn.off {
+      border-color: rgba(148, 163, 184, 0.25);
+      color: #64748b;
+    }
+
+    .modal-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(2, 4, 7, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .modal-screen h1 {
+      font-size: 20px;
+      letter-spacing: 3px;
+      color: #e0f2fe;
+      margin-bottom: 8px;
+    }
+
+    .modal-screen p {
+      font-size: 12px;
+      color: #64748b;
+      max-width: 340px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .primary-btn {
+      padding: 14px 28px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
+      color: #e0f2fe;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+  <div id="visor-vignette"></div>
+  <div id="reticle"></div>
+
+  <div id="joystick-zone-visual">
+    <div id="joystick-knob"></div>
+  </div>
+
+  <div id="hud">
+    <div class="hud-top">
+      <div class="panel">
+        <div class="sys-label">SUB-LEVEL 9 // CONTAINMENT</div>
+        <div class="objective-text" id="objective-main">LOCATE OVERRIDE KEYCARDS</div>
+        <div class="objective-sub" id="objective-count">KEYCARDS RECOVERED: 0 / 3</div>
+        <button id="btn-debug-ai">[DEBUG AI]</button>
+
+        <div id="ai-telemetry-drawer">
+          <div class="tele-row">
+            <span class="tele-key">FSM STATE:</span>
+            <span class="tele-val" id="ai-state-val">DORMANT</span>
+          </div>
+          <div class="tele-row">
+            <span class="tele-key">PROXIMITY:</span>
+            <span class="tele-val" id="ai-dist-val">-- m</span>
+          </div>
+          <div class="tele-row">
+            <span class="tele-key">STIMULUS:</span>
+            <span class="tele-val" id="ai-sensor-val">NONE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel telemetry-box">
+        <div class="sys-label">TORCH CELL</div>
+        <div class="bar-track"><div id="battery-fill"></div></div>
+        <div class="sys-label" style="margin-top: 6px;">STAMINA</div>
+        <div class="bar-track"><div id="stamina-fill"></div></div>
+        <div id="fps-counter">SYS: 60 FPS</div>
+      </div>
+    </div>
+
+    <div class="hud-bottom">
+      <div class="touch-hint">
+        LEFT THUMB: MOVE<br />
+        RIGHT THUMB: LOOK
+      </div>
+      <div class="action-cluster">
+        <button id="btn-sprint" class="tac-btn">SPRINT</button>
+        <button id="btn-light" class="tac-btn active">LIGHT<br />ON</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="boot-screen" class="modal-screen">
+    <h1>PROJECT EREBUS</h1>
+    <p>SUB-LEVEL 9 BIOMETRIC INTERFACE.<br />Recover 3 Encrypted Override Keycards to power the Extraction Elevator. Avoid sprint noise and direct beam contact with The Warden.</p>
+    <button id="btn-deploy" class="primary-btn">INITIALIZE NEURAL LINK</button>
+  </div>
+
+  <div id="capture-overlay" class="modal-screen" style="display: none; background: rgba(25, 2, 4, 0.94);">
+    <h1 style="color: #ef4444;">SIGNAL TERMINATED</h1>
+    <p>THE WARDEN INTERCEPTED YOUR BIO-SIGNATURE IN SUB-LEVEL 9.</p>
+    <button id="btn-respawn" class= primary-btn" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.2);">RE-INITIALIZE CLONE</button>
+  </div>
+
+  <div id="escape-overlay" class="modal-screen" style="display: none; background: rgba(3, 22, 16, 0.94);">
+    <h1 style="color: #4ade80;">EXTRACTION COMPLETE</h1>
+    <p>SUB-LEVEL 9 CONTAINMENT BREACH SURVIVED. SURFACE ELEVATOR ASCENDING.</p>
+    <button id="btn-replay" class="primary-btn" style="border-color: #4ade80; background: rgba(74, 222, 128, 0.2);">REPLAY SIMULATION</button>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
