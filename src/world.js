@@ -277,12 +277,12 @@ export class SubLevelWorld {
     this._addEmergencyLight(0, -13.0, 0xf59e0b, 2.5);
   }
 
-  _spawnObjectives() {
-    // 3 Encrypted Override Keycards placed in distant wings
+    _spawnObjectives() {
+    // 3 Encrypted Override Keycards: 2 in outer wings + 1 hidden behind the North Pillar
     const locations = [
       new THREE.Vector3(-13.8, 1.15, 2.2),  // Keycard 1: West Cryo-Storage
       new THREE.Vector3(13.8, 1.15, -5.2),  // Keycard 2: East Biometrics Lab
-      new THREE.Vector3(0.0, 1.15, -14.2),  // Keycard 3: North Deep Containment
+      new THREE.Vector3(1.15, 1.15, -11.8), // Keycard 3: Tucked behind right edge of North Pillar (safe from Warden spawn!)
     ];
 
     const cardGeo = new THREE.BoxGeometry(0.32, 0.2, 0.03);
@@ -306,7 +306,9 @@ export class SubLevelWorld {
         baseY: pos.y,
       });
     });
-  }
+    }
+  
+  
 
   _setupFlashlight() {
     this.flashlight = new THREE.SpotLight(0xeef6ff, this.maxIntensity, 28, Math.PI * 0.21, 0.55, 1.35);
