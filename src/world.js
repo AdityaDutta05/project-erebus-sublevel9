@@ -482,13 +482,45 @@ export class SubLevelWorld {
     }
 
     // Check Extraction Elevator Win Trigger (z > 9.6 near gate at z=11.4)
-    if (this.elevatorUnlocked && !this.escaped && playerPos) {
+        if (this.elevatorUnlocked && !this.escaped && playerPos) {
       if (Math.abs(playerPos.x) < 2.2 && playerPos.z > 9.6) {
         this.escaped = true;
-        const escapeOverlay = document.getElementById('escape-overlay');
-        if (escapeOverlay) escapeOverlay.style.display = 'flex';
+        this.playEndingVideo();
       }
+        }
+    
+  }
+      
+
+  playEndingVideo() {
+    const overlay = document.getElementById('outro-video-overlay');
+    const video = document.getElementById('outro-video');
+
+    const showWinScreen = () => {
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+      }
+      if (overlay) overlay.style.display = 'none';
+
+      const escapeOverlay = document.getElementById('escape-overlay');
+      if (escapeOverlay) escapeOverlay.style.display = 'flex';
+    };
+
+    if (!overlay || !video) {
+      showWinScreen();
+      return;
+    }
+
+    overlay.style.display = 'flex';
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(() => {
+      video.muted = true;
+      video.play().catch(showWinScreen);
     }
   }
-      }
-        
+    video.onended = showWinScreen;
+  }
+
