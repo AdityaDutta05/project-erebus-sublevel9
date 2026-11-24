@@ -380,16 +380,17 @@
     </div>
   </div>
 
- <div id="boot-screen" class="modal-screen" style="background: #020407; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px;" onclick="const v=document.getElementById('intro-video'); if(v && v.muted){v.muted=false; v.play().catch(()=>{});}">
+ <div id="boot-screen" class="modal-screen" style="background: #020407; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px;" onpointerdown="const v=document.getElementById('intro-video'); if(v){v.muted=false; if(v.paused) v.play().catch(()=>{});}">
   <div style="position: relative; width: 100%; max-width: 420px; margin-bottom: 16px; border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; overflow: hidden; background: #000;">
-    <video id="intro-video" autoplay playsinline preload="auto" style="width: 100%; height: auto; max-height: 240px; display: block;">
-      <source src="./intro.mp4" type="video/mp4" />
+    <video id="intro-video" autoplay muted playsinline preload="auto" poster="./PROJECT_EREBUS_poster.png" style="width: 100%; height: auto; max-height: 240px; display: block;">
+      <source src="./intro.mp4?v=3" type="video/mp4" />
     </video>
   </div>
   <h1>PROJECT EREBUS</h1>
   <p>SUB-LEVEL 9 BIOMETRIC INTERFACE.<br />Recover 3 Encrypted Override Keycards to power the Extraction Elevator. Avoid sprint noise and direct beam contact with The Warden.</p>
-  <button id="btn-deploy" class="primary-btn" onclick="event.stopPropagation(); const v=document.getElementById('intro-video'); if(v){v.pause(); v.muted=true; v.innerHTML=''; v.removeAttribute('src'); v.load();}">INITIALIZE NEURAL LINK</button>
+  <button id="btn-deploy" class="primary-btn" onpointerdown="event.stopPropagation();" onclick="event.stopPropagation(); const v=document.getElementById('intro-video'); if(v){v.pause(); v.muted=true; v.innerHTML=''; v.removeAttribute('src'); v.load();}">INITIALIZE NEURAL LINK</button>
  </div>
+  
   
   
   <div id="outro-video-overlay" style="display: none; position: fixed; inset: 0; z-index: 150; background: #000; align-items: center; justify-content: center;">
