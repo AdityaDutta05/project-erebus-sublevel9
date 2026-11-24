@@ -1,12 +1,16 @@
+# PROJECT EREBUS: SUB-LEVEL 9
 
 ![Project Erebus: Sub-Level 9](./PROJECT_EREBUS_poster.png)
 
+> **A zero-dependency, browser-native 3D psychological horror vertical slice built with Three.js, volumetric-style lighting, Web Audio spatial synthesis, and a 4-state Finite State Machine AI.**
 
-# PROJECT EREBUS: SUB-LEVEL 9
+🎮 **[PLAY LIVE DEMO IN BROWSER](https://adityadutta05.github.io/project-erebus-sublevel9/)** *(Supports Mobile Dual-Thumb Touch & Desktop)*
 
-> **A zero-dependency, browser-native 3D psychological horror vertical slice built with Three.js, procedural PBR lighting, Web Audio spatial synthesis, and a 4-state Finite State Machine AI.**
+## IN GAME GLIMPSES
+![PROJECT EREBUS: Sub-Level 9 Gameplay & Cutscenes](./IN%20GAME%20GLIMPSE.jpg)
 
-🎮 **[PLAY LIVE DEMO IN BROWSER](https://github.io)** *(Supports Mobile Dual-Thumb Touch & Desktop WASD)*
+
+
 
 ## Core Engineering & Technical Architecture
 
