@@ -390,6 +390,81 @@
   <p>SUB-LEVEL 9 BIOMETRIC INTERFACE.<br />Recover 3 Encrypted Override Keycards to power the Extraction Elevator. Avoid sprint noise and direct beam contact with The Warden.</p>
   <button id="btn-deploy" class="primary-btn" onpointerdown="event.stopPropagation();" onclick="event.stopPropagation(); const v=document.getElementById('intro-video'); if(v){v.pause(); v.muted=true; v.innerHTML=''; v.removeAttribute('src'); v.load();}">INITIALIZE NEURAL LINK</button>
  </div>
+  <!-- Intro Video Unmute Pop-up -->
+<div id="erebus-unmute-popup" role="button" tabindex="0" aria-label="Unmute intro video">
+  <span>🔇 TAP TO UNMUTE</span>
+</div>
+
+<style>
+  #erebus-unmute-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    padding: 10px 18px;
+    background: rgba(2, 4, 7, 0.92);
+    border: 1.5px solid #38bdf8;
+    border-radius: 4px;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    color: #e0f2fe;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    user-select: none;
+    pointer-events: auto;
+    animation: unmutePulse 1.6s infinite ease-in-out;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  #erebus-unmute-popup.fade-out {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+    pointer-events: none;
+  }
+
+  @keyframes unmutePulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+    50% { box-shadow: 0 0 22px rgba(56, 189, 248, 0.7); }
+  }
+</style>
+
+<script>
+  (function () {
+    const popup = document.getElementById('erebus-unmute-popup');
+    const introVid = document.getElementById('intro-video');
+    const deployBtn = document.getElementById('btn-deploy');
+
+    function dismissPopup() {
+      if (popup) {
+        popup.classList.add('fade-out');
+        setTimeout(() => popup.remove(), 320);
+      }
+      window.removeEventListener('pointerdown', handleUnmute);
+    }
+
+    function handleUnmute() {
+      if (introVid) {
+        introVid.muted = false;
+        introVid.volume = 1.0;
+        if (introVid.paused) introVid.play().catch(() => {});
+      }
+      dismissPopup();
+    }
+
+    popup.addEventListener('pointerdown', handleUnmute, { once: true });
+    window.addEventListener('pointerdown', handleUnmute, { once: true });
+
+    if (deployBtn) {
+      deployBtn.addEventListener('pointerdown', dismissPopup, { once: true });
+    }
+    if (introVid) {
+      introVid.addEventListener('ended', dismissPopup, { once: true });
+    }
+  })();
+</script>
   
   
   
