@@ -519,8 +519,8 @@ export class SubLevelWorld {
     video.play().catch(() => {
       video.muted = true;
       video.play().catch(showWinScreen);
-    }
-  }
+    })
+  
     video.onended = showWinScreen;
   }
-
+}
