@@ -1,5 +1,6 @@
 
-https://github.com/user-attachments/assets/9934de89-5ca1-46e9-8599-db45259b7961
+![Project Erebus: Sub-Level 9](./PROJECT_EREBUS_poster.png)
+
 
 # PROJECT EREBUS: SUB-LEVEL 9
 
