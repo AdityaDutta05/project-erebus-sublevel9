@@ -1,6 +1,7 @@
 # PROJECT EREBUS: SUB-LEVEL 9
 
-![Project Erebus: Sub-Level 9](./PROJECT_EREBUS_O9_Poster.png)
+![Project Erebus: Sub-Level 9](./PROJECT_EREBUS_09.Poster.png)
+
 
 
 > **A zero-dependency, browser-native 3D psychological horror vertical slice built with Three.js, volumetric-style lighting, Web Audio spatial synthesis, and a 4-state Finite State Machine AI.**
