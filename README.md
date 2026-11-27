@@ -4,7 +4,8 @@
 
 > **A zero-dependency, browser-native 3D psychological horror vertical slice built with Three.js, volumetric-style lighting, Web Audio spatial synthesis, and a 4-state Finite State Machine AI.**
 
-🎮 **[PLAY LIVE DEMO IN BROWSER](https://adityadutta05.github.io/project-erebus-sublevel9/)** *(Supports Mobile Dual-Thumb Touch & Desktop)*
+🎮 **[PLAY LIVE ON ITCH.IO](https://adityadutta05.itch.io/project-erebus-sub-level-9)** *(Supports Mobile Touch & Desktop)*
+🌐 **[PLAY LIVE ON GITHUB PAGES](https://adityadutta05.github.io/project-erebus-sublevel9/)**
 
 ## IN GAME GLIMPSES
 ![PROJECT EREBUS: Sub-Level 9 Gameplay & Cutscenes](./IN%20GAME%20GLIMPSE.jpg)
